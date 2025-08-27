@@ -17,13 +17,15 @@ namespace Cronometro
 
         static void MenuRaiz()
         {
+            var typeMulti = 0;
             while (true)
             {
-                Console.Clear();
+                
                 Console.WriteLine("Menu de opções:");
                 Console.WriteLine("1 - Progressivo");
                 Console.WriteLine("2 - Regressivo");
-                Console.WriteLine("3 - Voltar");
+                Console.WriteLine("3 - Sair");
+                Console.WriteLine("4 - Limpar tela");
                 Console.WriteLine("\nDigite o numero desejado e pressione Enter");
 
                 int operacao = int.Parse(Console.ReadLine()!);
@@ -31,15 +33,27 @@ namespace Cronometro
                 switch (operacao)
                 {
                     case 1:
-                        Progressivo(); break;
+                        typeMulti = Progressivo();
+                        break;
                     case 2:
-                        Regressivo(); break;
+                        typeMulti = Regressivo();
+                        break;
                     case 3:
                         return;
+                    case 4:
+                        Console.Clear();
+                        break;
                     default:
                         Console.WriteLine("Opção inválida! Pressiona Enter para continuar"); break;
 
                 }
+                if (typeMulti == 0) 
+                { 
+                    Console.WriteLine("\nFormato de tempo inválido\n");
+                    Thread.Sleep(2500);
+                    Console.Clear();
+                }
+
             }
 
             static (char type, int tempo)DigitarTempo()
@@ -60,20 +74,22 @@ namespace Cronometro
 
                 if (dados.type == 'm') 
                     multiplicador = 60;
-                else
+                else if (dados.type == 's')
                     multiplicador = 1;
                 
                 return (multiplicador, dados.tempo);
             }
 
 
-            static void Progressivo()
+            static int Progressivo()
             {
                 var dados = Checagem();
                 
+                if(dados.typeMulti == 0)
+                    return dados.typeMulti;
+
                 int tempoAtual = 0;
-                int tempo = dados.tempo;
-                int tempoFinal = tempo * dados.typeMulti;
+                int tempoFinal = dados.tempo * dados.typeMulti;
                 Console.WriteLine("Digite o tempo que deseja contar em segundos");
 
                 while (tempoAtual != tempoFinal)
@@ -86,17 +102,20 @@ namespace Cronometro
                 Console.Clear();
                 Console.WriteLine("Cronometro finalizado!");
                 Thread.Sleep(2500);
+                return dados.typeMulti;
             }
 
-            static void Regressivo()
+            static int Regressivo()
             {
                 var dados = Checagem();
 
+                if (dados.typeMulti == 0)
+                    return dados.typeMulti;
 
                 int tempoAtual = 0;
                 int tempo = dados.tempo;
                 int tempoFinal = tempo * dados.typeMulti;
-                tempo = tempo + 1;
+                tempo = tempo * 60 + 1;
 
                 Console.WriteLine("Digite o tempo que deseja contar em segundos");
                 while (tempoAtual != tempo)
@@ -109,6 +128,7 @@ namespace Cronometro
                 Console.Clear();
                 Console.WriteLine("Cronometro finalizado!");
                 Thread.Sleep(2500);
+                return dados.typeMulti;
             }
         }
     }
