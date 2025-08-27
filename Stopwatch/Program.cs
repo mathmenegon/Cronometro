@@ -1,4 +1,5 @@
-﻿using Stopwatch;
+﻿using Cronometro;
 
-Cronometro cronometro = new Cronometro();
+Menu cronometro = new Menu();
 cronometro.Start();
+
